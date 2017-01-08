@@ -347,6 +347,19 @@ class TestBlock(unittest.TestCase):
         self.assertTrue('metaKey' in b)
         self.assertEqual('metaValue', b['metaKey'])
 
+    def test_iterate(self):
+        b = Block.loadd({
+            Block.CHILDREN: [
+                {},
+                {},
+                {},
+            ],
+        }, 999)
+        count = 0
+        for c in b:
+            count += 1
+        self.assertEqual(3, count)
+
 
 class TestHeadingStructure(unittest.TestCase):
     def test(self):

@@ -129,6 +129,9 @@ class Block(dict):
         )
         return b
 
+    def __iter__(self):
+        return iter(self[Block.CHILDREN])
+
 
 class HeadingStructure(Block):
 
