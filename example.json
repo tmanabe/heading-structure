@@ -1,0 +1,153 @@
+{
+  "contents": [
+    {
+      "from": 1,
+      "to": 6406,
+      "mandatory": true
+    }
+  ],
+  "children": [
+    {
+      "style": "rgb(0, 0, 0);24;normal;700;null;/body/h2/#text;none",
+      "headings": [
+        [
+          {
+            "from": 3194,
+            "to": 3208,
+            "mandatory": true
+          }
+        ]
+      ],
+      "contents": [
+        {
+          "from": 3194,
+          "to": 4128,
+          "mandatory": true
+        }
+      ],
+      "children": []
+    },
+    {
+      "style": "rgb(0, 0, 0);24;normal;700;null;/body/h2/#text;none",
+      "headings": [
+        [
+          {
+            "from": 4129,
+            "to": 4169,
+            "mandatory": true
+          }
+        ]
+      ],
+      "contents": [
+        {
+          "from": 4129,
+          "to": 4972,
+          "mandatory": true
+        }
+      ],
+      "children": [
+        {
+          "style": "rgb(0, 0, 0);18.72;normal;700;null;/body/h3/#text;none",
+          "headings": [
+            [
+              {
+                "from": 4170,
+                "to": 4216,
+                "mandatory": true
+              }
+            ]
+          ],
+          "contents": [
+            {
+              "from": 4170,
+              "to": 4449,
+              "mandatory": true
+            }
+          ],
+          "children": []
+        },
+        {
+          "style": "rgb(0, 0, 0);18.72;normal;700;null;/body/h3/#text;none",
+          "headings": [
+            [
+              {
+                "from": 4450,
+                "to": 4497,
+                "mandatory": true
+              }
+            ]
+          ],
+          "contents": [
+            {
+              "from": 4450,
+              "to": 4741,
+              "mandatory": true
+            }
+          ],
+          "children": []
+        },
+        {
+          "style": "rgb(0, 0, 0);18.72;normal;700;null;/body/h3/#text;none",
+          "headings": [
+            [
+              {
+                "from": 4742,
+                "to": 4764,
+                "mandatory": true
+              }
+            ]
+          ],
+          "contents": [
+            {
+              "from": 4742,
+              "to": 4972,
+              "mandatory": true
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "style": "rgb(0, 0, 0);24;normal;700;null;/body/h2/#text;none",
+      "headings": [
+        [
+          {
+            "from": 4973,
+            "to": 4989,
+            "mandatory": true
+          }
+        ]
+      ],
+      "contents": [
+        {
+          "from": 4973,
+          "to": 6379,
+          "mandatory": true
+        }
+      ],
+      "children": []
+    },
+    {
+      "style": "rgb(0, 0, 0);24;normal;700;null;/body/h2/#text;none",
+      "headings": [
+        [
+          {
+            "from": 6380,
+            "to": 6385,
+            "mandatory": true
+          }
+        ]
+      ],
+      "contents": [
+        {
+          "from": 6380,
+          "to": 6406,
+          "mandatory": true
+        }
+      ],
+      "children": []
+    }
+  ],
+  "rawString": " <IMG:https%3A%2F%2Fbadge.facebook.com%2Fbadge%2F100003456025237.73.2025864882.png> [ <IMG:data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAADgAAAAQCAAAAABmEuOZAAAB5UlEQVQoz52STWsTURSG8zP8DxXBj4Wb6iKYkJYWcaqgC8dFN1pNLCmKutAu1GYRYyONHygljOYGb8WVjBCkoEMTdFFwFqFUjFoJASdOIUkbm2QeF2MSSbIQz%2Bo9h%2Fvw3nPv6%2BE%2Fy9M%2Fqj9tdZtGV5YtIlZn6qFcBmj87Bywx9tqSUROWrqu6%2Frpa6BF8ELsmRCLQwYeVgNCCDHv64IKQMltjPeVSsCuVLZA0%2FDCaKV91dUQwIYK8FZKKRN7pZTp3Vd5J4SIJcBPvYoLNoqDQYDWngOv%2Fkjrx%2FpcK5veL%2BdOAdqUuBgNBpJSxrVB4ONJZbbmyuVMJrNN%2FgJm2HUERu9DLEpnx4U2WDxcUjYm3XfN6PLoJ%2FPuFfPlmfBDNI08jOh5Jr71Ozon1myF9LkWwKZt25bp1jpaUB4y8NXiO94BO84sYyt8ve2zgMsidezXhxkhxPgaJF%2BgFhjhkpzvA51bhiGTB5%2BPpeK7btbxg5fsdUCx4U4OtfA9yJuhKj071u4VOv%2F4MUUPeH4HtbCwQmLfg78ci2Gg4XQDAOAXYpjsWdM0j9g0Z0H9PM3io63hUBUPhXRPVjePt9UELJGbNk0ztM3rIkw9WYnmoDp2Y1DInVJbNQEaTbepAXzJOAAtZxD4b%2FUb5Zf5kIEQURgAAAAASUVORK5CYII%3D> ] Last update: 2016.9.4 Tomohiro Manabe <IMG:data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAMQAAAAQCAAAAABsYo%2BOAAAE3UlEQVRIx92Wf0zUZRzHT60la6Kp81xmTq25YYZrJWrO6UZaprMQ8wdmTClcuDQlf3Q6HZKETCNBIZQ74ITjDvVKBFSQXxOYXlhocQsVQRA4zgMEDu6Ou%2B%2BrP%2B574KFzkq62Pv%2B9n%2BfzfJ7369n3%2BTxfCf%2BDkDxJki1PY%2B03ZCnSavUuUXzSSM3ZEgCM53IGVunfgrAqJa3uI3r5PQRdcpdT%2FfKSjqpVAQA0bvd2Ty172fC4SmK09QzQ%2BPyoAULAGPetjSeoU%2BcKlnhRz9aBxglBZT8IQ5jtMZVcITcOEEJ%2BZcAQUvet4%2B156yz1sTcrypz6XR1kiBB674FUcoWf8ak%2Bp%2BJdmusZCW01p4%2FWgCVNHdMGyu1XL2oU9l6NVH8h5VdAOJUeXYugECbUwxkfFNCqOH25H4Qx9qeS4t2J%2FLk3Ag5uNVBz8mdVVi9EQnxGw5H4ZKrijnQ6NOmKGu6FSPb90AAFqtRLojHljkJyZBrxBoo2qmPVWgcAWbJkcmUn81OOmUFC9%2B5Fl5EvOUPpLNiRxHVvO23vbapjbXKvRhrpEL5Kgt0HaZne0Zh9WwoU%2BJDMbV8j5aPcIWw%2Bqq6ubcuwKaaCYdQN%2FARuyXohAsNMjj88KrD4%2F%2B5YWYr1kwqhx7OxRyD2AITLnXmmuTGYPw9xCtHGtZntfBkHgHlnAF2h0%2FQUe3cgAZUPlI0QaH0RUtNhbDUEb4eIrX1aWgu1wzobnzPBclWHpnWYAAU%2BpPNxDDDNDaI7%2FC5wYhnopgJTbzBZcY9yEaIlsQRgXRQ9SeTMAE75wnAjmIa1g8nT7EwMioEoEUK0sehHUIh3QRkAceuBxWFIQOUHOi%2FoGAJCUqR8tB6CDzsruLS0DoTBZec8tFrtwUscZ3E%2BHJmBllHnAe8HISZ982Y3oHoAIs9r0Ny%2FRIj946sAdJMcmY3IPgLKPBwMN0LuCIAXLq5YsWIjBD8AIdoYebbvHvRCyBYi6dutYwisCRd4Vd%2FWW8GlpXVgkdy69ryzE2qamjeeUmfM1pbx2pn%2BENPsQZtFiFIRopyG73xFiOYT79gA3s4%2BDocWABfHwXAjuVeHOsA2SK%2FT6SqcEPtFCNHG68pHQIR8igTS%2FOCKF7QPoV1ST5dHpZwvDsOBkD4tLYfseYLd5zzUlOKINmEREO43ELYFrGPLQLMaCtVQOZu28VmQ%2FQEcmwJ4VTEPBF9s%2B4wwxiYs2QaQOL0YasaZYZcMJlZ3p%2FW8dQny5ghOl9siISAYCtW9NsLXgkNNbaQgQiwB26R8JBT4Toi9ttxzT%2F0Gj9CWwOBcZdSGLPmUOVmZM99IQdSsTDiXtr4B7qxOyYwXwK5U5ReqD%2B29hXVTTH70pIW%2FFS2YHI%2FMn8rVoyN6Zo2MoPP98zmKwaHs8fysyTv18uFMDOOumHd6bGwKHRpkAvMcAcgPyo7%2B2gIHthyq4%2FZaTWpgvXjU15eWqL99JQGZPy4bts37LhxtIntitwgx%2F1jROsXD70S3AayP0o0tzoFmV59vahCPrMNArcnxcPcWGsyWmk5ni%2By%2Baek%2F3ZnqzLrjfPbb7gM0m%2FoS7LX2lrtWdxvmBtdsyhqIW2%2Bttj%2F5Y%2Fesw%2BDvUN7%2F58utH1Z%2FHwaxgQN6sZ91WFalFz3FcsfSxKAWchbNOv5fQkDP0y13%2Bx%2F7G9tWsn%2FxOLf0AAAAAElFTkSuQmCC> Yahoo Japan Corporation Kioi Tower, Tokyo Garden Terrace Kioicho, 1-3 Kioicho, Chiyodaku, Tokyo 102-8282 Japan Doctor of Informatics in Social Informatics ( Kyoto University , 2016) Master of Informatics in Social Informatics ( Kyoto University , 2013) Bachelor of Engineering in Informatics and Mathematical Science ( Kyoto University , 2011) Member of the Database Society of Japan Career Summary 2004. 4. 1 - 2007. 3. 1 : Student in the general education curriculum of Tokushima Prefectural Joto Senior High School 2007. 4. 1 - 2011. 3.24 : Student of Undergraduate School of Informatics and Mathematical Science of Faculty of Engineering of Kyoto University 2008. 4. 1 - 2011. 3.24 : Student in Computer Science Course of the same school 2010. 4. 9 - 2016. 3.23 : Member of Digital Library Group (or Tanaka Laboratory , formerly Tanaka and Tajima Laboratory) in Social Information Model Division of Department of Social Informatics of Graduate School of Informatics of Kyoto University 2010. 4.12 - 2016. 3. 9 : Advised by Prof. Keishi Tajima 2011. 4. 1 - 2013. 3.23 : Master course student of the same dept. 2013. 4. 1 - 2016. 3.23 : Doctoral student of the same dept. 2013. 4. 1 - 2016. 3.31 : Research fellow (DC1) of the Japan Society for the Promotion of Science 2016. 4. 1 - current : Yahoo Japan Corporation Research Interests and Main Publications Logical structure of tree-structured documents Tomohiro Manabe and Keishi Tajima. Extracting Logical Hierarchical Structure of HTML Documents Based on Headings . Proc. of VLDB , vol. 8, no. 12, pp. 1606-1617, August 2015. Reference implementation , data set , slides , and poster Automatic summarization of structured documents Tomohiro Manabe and Keishi Tajima. Heading-Aware Snippet Generation for Web Search. In Proc. of AIRS , LNCS, vol. 9460, pp. 188-200, 2015. Author version ( The final publication is available at link.springer.com ) Evaluation results and slides Block-based web search Tomohiro Manabe and Keishi Tajima. Heading-Aware Proximity Measure and Its Application to Web Search . DBSJ Journal , vol. 14, article no. 2, March 2016. Output All publications in English / All publications Other Activities 2007. 4.28 - 2009.12.19 : Member of Yukidaruma-pro , an official filmmaking circle of Kyoto University YouTube: yukidarumapro - YouTube 2011. 8.25 - 2011.9.20 : Intern at former Cyber Solution Laboratory of Nippon Telegraph and Telephone Corporation Theme: Information extraction from web contents 2011. 9.27 - 2011.9.29 : Student of Kyoto University Summer Design School 2011 Theme: Designing an HTML editor - not for the image conscious 2011.10. 4 - 2012. 1.31 : Teaching assistant of Hardware and Software Laboratory Project 2 , a course of Faculty of Engineering of Kyoto University 2012. 5 - 2012.9 : Staff of Kyoto University Summer Design School 2012 2012.10. 2 - 2013.1.23 : Teaching assistant of Hardware and Software Laboratory Project 2 , a course of Faculty of Engineering of Kyoto University 2013. 3.11 - 2016. 3.31 : Student member of the Database Society of Japan 2013. 6.28 - 2016. 3.31 : Obtained JSPS KAKENHI (Grants-in-Aid for JSPS Fellows), 3,300,000 yen in total Research Project: A Study on Block-Level Web Search (Grant Number: 13J06384) 2014. 3.15 - 2014.3.16 : Guest lecturer of Digital Design Workshop at Kyoto University Spring Design School 2014 2016. 4. 1 - current : Member of the Database Society of Japan 2016. 5.17 : TOEIC IP score 830 2016. 7.20 : Linux Professional Institute Certified Level 1 2016. 8 - current : Organizer of the NTCIR-13 OpenLiveQ task Links DBLP GitHub Facebook"
+}
