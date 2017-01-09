@@ -7,6 +7,8 @@ from heading_structure import Headings
 from heading_structure import HeadingStructure
 from heading_structure import Range
 from heading_structure import RangeList
+import json
+import tempfile
 import unittest
 
 
@@ -396,11 +398,38 @@ class TestHeadingStructure(unittest.TestCase):
 
     def test_load(self):
         with open('example.json') as f:
-            HeadingStructure.load(f)
+            d = json.load(f)
+        with open('example.json') as f:
+            hs = HeadingStructure.load(f)
+        self.assertEqual(d, hs)
 
     def test_loads(self):
         with open('example.json') as f:
-            HeadingStructure.loads(f.read())
+            s = f.read()
+        d = json.loads(s)
+        hs = HeadingStructure.loads(s)
+        self.assertEqual(d, hs)
+
+    def test_dump(self):
+        d = tempfile.TemporaryDirectory()
+        p = '%s/tmp.json' % d.name
+        with open('example.json') as f:
+            hs = HeadingStructure.load(f)
+        with open(p, 'w') as f:
+            hs.dump(f)
+        with open('example.json') as f:
+            source = json.load(f)
+        with open(p) as f:
+            destination = json.load(f)
+        self.assertEqual(source, destination)
+        d.cleanup()
+
+    def test_dumps(self):
+        with open('example.json') as f:
+            source = f.read()
+        hs = HeadingStructure.loads(source)
+        destination = hs.dumps()
+        self.assertEqual(json.loads(source), json.loads(destination))
 
 
 if __name__ == '__main__':

@@ -151,3 +151,9 @@ class HeadingStructure(Block):
         hs = cls.loadd(d, len(rs))
         hs[HeadingStructure.RAW_STRING] = rs
         return hs
+
+    def dump(self, f):
+        f.write(self.dumps())
+
+    def dumps(self):
+        return json.dumps(self, ensure_ascii=False, indent=2)
