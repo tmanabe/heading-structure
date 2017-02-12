@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-
 import json
 
 
@@ -20,6 +19,18 @@ class Range(dict):
         else:
             r[cls.MANDATORY] = True
         return r.validate(ubound)
+
+    @property
+    def fron(self):
+        return self[self.FROM]
+
+    @property
+    def mandatory(self):
+        return self[self.MANDATORY]
+
+    @property
+    def to(self):
+        return self[self.TO]
 
     def is_empty(self):
         return self[self.FROM] == self[self.TO]
@@ -129,6 +140,18 @@ class Block(dict):
         )
         return b
 
+    @property
+    def children(self):
+        return self[self.CHILDREN]
+
+    @property
+    def contents(self):
+        return self[self.CONTENTS]
+
+    @property
+    def headings(self):
+        return self[self.HEADINGS]
+
     def __iter__(self):
         return iter(self[Block.CHILDREN])
 
@@ -151,6 +174,10 @@ class HeadingStructure(Block):
         hs = cls.loadd(d, len(rs))
         hs[HeadingStructure.RAW_STRING] = rs
         return hs
+
+    @property
+    def rawString(self):
+        return self[self.RAW_STRING]
 
     def dump(self, f):
         f.write(self.dumps())

@@ -35,6 +35,17 @@ class TestRange(unittest.TestCase):
         self.assertEqual(456, r[Range.TO])
         self.assertEqual(False, r[Range.MANDATORY])
 
+    def test_properties(self):
+        d = {
+            Range.FROM: 0,
+            Range.TO: 999,
+            Range.MANDATORY: True,
+        }
+        r = Range.loadd(d, 999)
+        self.assertEqual(0, r.fron)
+        self.assertEqual(999, r.to)
+        self.assertEqual(True, r.mandatory)
+
     def test_default(self):
         d = {}
         r = Range.loadd(d, 999)
@@ -309,6 +320,26 @@ class TestBlock(unittest.TestCase):
         self.assertEqual([], b[Block.CONTENTS])
         self.assertEqual([], b[Block.HEADINGS])
 
+    def test_properties(self):
+        d0 = {
+            Range.FROM: 0,
+            Range.TO: 123,
+            Range.MANDATORY: True,
+        }
+        d1 = {
+            Range.FROM: 123,
+            Range.TO: 456,
+            Range.MANDATORY: False,
+        }
+        b = Block.loadd({
+            Block.CHILDREN: [],
+            Block.CONTENTS: [d0, d1],
+            Block.HEADINGS: [[d0]],
+        }, 999)
+        self.assertEqual([], b.children)
+        self.assertEqual([d0, d1], b.contents)
+        self.assertEqual([[d0]], b.headings)
+
     def test_nest(self):
         d0 = {
             Range.FROM: 0,
@@ -395,6 +426,15 @@ class TestHeadingStructure(unittest.TestCase):
     def test_default(self):
         hs = HeadingStructure.loads('{}')
         self.assertEqual('', hs[HeadingStructure.RAW_STRING])
+
+    def test_property(self):
+        b = HeadingStructure.loadd({
+            Block.CHILDREN: [],
+            Block.CONTENTS: [],
+            Block.HEADINGS: [],
+            HeadingStructure.RAW_STRING: 'x' * 789,
+        }, 999)
+        self.assertEqual('x' * 789, b.rawString)
 
     def test_load(self):
         with open('example.json') as f:
