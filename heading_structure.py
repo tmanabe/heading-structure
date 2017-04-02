@@ -161,6 +161,16 @@ class HeadingStructure(Block):
     RAW_STRING = 'rawString'
 
     @classmethod
+    def batch_load(cls, d):
+        from glob import glob
+        from os import path
+        result = []
+        for p in glob(path.join(d, '*.json')):
+            with open(p, 'r') as f:
+                result.append(cls.load(f))
+        return result
+
+    @classmethod
     def load(cls, f):
         return cls.loads(f.read())
 
