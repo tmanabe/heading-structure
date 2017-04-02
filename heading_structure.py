@@ -172,7 +172,7 @@ class HeadingStructure(Block):
                     result[b] = cls.load(f)
                 except ValueError:
                     from sys import stderr
-                    stderr.write('ValueError loading %s' % p)
+                    stderr.write('ValueError loading %s\n' % p)
         return result
 
     @classmethod
