@@ -168,7 +168,11 @@ class HeadingStructure(Block):
         for p in glob(path.join(d, '*.json')):
             b = p.rsplit('.', 1)[0].rsplit(path.sep, 1)[-1]
             with open(p, 'r') as f:
-                result[b] = cls.load(f)
+                try:
+                    result[b] = cls.load(f)
+                except ValueError:
+                    from sys import stderr
+                    stderr.write('ValueError loading %s' % p)
         return result
 
     @classmethod
