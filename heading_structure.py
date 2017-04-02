@@ -164,10 +164,11 @@ class HeadingStructure(Block):
     def batch_load(cls, d):
         from glob import glob
         from os import path
-        result = []
+        result = {}
         for p in glob(path.join(d, '*.json')):
+            b = p.rsplit('.', 1)[0].rsplit(path.sep, 1)[-1]
             with open(p, 'r') as f:
-                result.append(cls.load(f))
+                result[b] = cls.load(f)
         return result
 
     @classmethod

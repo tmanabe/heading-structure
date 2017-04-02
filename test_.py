@@ -436,9 +436,9 @@ class TestHeadingStructure(unittest.TestCase):
         }, 999)
         self.assertEqual('x' * 789, b.rawString)
 
-    def test_batch(self):
+    def test_batch_load(self):
         with open('example.json') as f:
-            expect = [json.load(f)]
+            expect = {'example': json.load(f)}
         actual = HeadingStructure.batch_load('.')
         self.assertEqual(expect, actual)
 
