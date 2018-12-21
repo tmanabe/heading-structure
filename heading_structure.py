@@ -2,200 +2,242 @@
 # coding: utf-8
 
 import json
+import os
 
 
-class Range(dict):
+class InvalidHeadingStructureException(Exception):
+    pass
+
+
+IHSE = InvalidHeadingStructureException
+
+
+class Range(object):
     FROM, TO = 'from', 'to'
     MANDATORY = 'mandatory'
+    __slots__ = [FROM, TO, MANDATORY]
 
     @classmethod
-    def loadd(cls, d, ubound):
-        r = cls()
-        r.update(d)
-        r[cls.FROM] = int(r[cls.FROM]) if (cls.FROM in r) else 0
-        r[cls.TO] = int(r[cls.TO]) if (cls.TO in r) else ubound
-        if cls.MANDATORY in r:
-            r[cls.MANDATORY] = True if r[cls.MANDATORY] else False
+    def read(cls, obj):
+        if not isinstance(obj, dict):
+            raise IHSE("Each range must be a JSON dict: " + obj)
+        for k in obj.keys():
+            if k not in cls.__slots__:
+                raise IHSE("Unknown property of a range: " + k)
+
+        self = cls()
+        if cls.FROM in obj:
+            setattr(self, cls.FROM, int(obj[cls.FROM]))
         else:
-            r[cls.MANDATORY] = True
-        return r.validate(ubound)
-
-    @property
-    def fron(self):
-        return self[self.FROM]
-
-    @property
-    def mandatory(self):
-        return self[self.MANDATORY]
-
-    @property
-    def to(self):
-        return self[self.TO]
-
-    def is_empty(self):
-        return self[self.FROM] == self[self.TO]
-
-    def validate(self, ubound):
-        self[self.FROM] = max(self[self.FROM], 0)
-        self[self.TO] = min(ubound, self[self.TO])
-        if self[self.TO] < self[self.FROM]:
-            self[self.TO] = self[self.FROM]
+            raise IHSE("A range without %s: %s" % (cls.FROM, obj))
+        if cls.TO in obj:
+            setattr(self, cls.TO, int(obj[cls.TO]))
+        else:
+            raise IHSE("A range without %s: %s" % (cls.TO, obj))
+        setattr(self, cls.MANDATORY, obj.get(cls.MANDATORY, True))
         return self
+
+    def sort(self):
+        return (getattr(self, Range.FROM), getattr(self, Range.TO))
+
+    def validate(self):
+        assert isinstance(getattr(self, self.FROM), int)
+        assert isinstance(getattr(self, self.TO), int)
+        if getattr(self, self.TO) < getattr(self, self.FROM):
+            raise IHSE("Invalid range: %s" % json.dumps(self))
+        assert getattr(self, self.MANDATORY) in [False, True]
+
+    def write(self):
+        return {
+            self.FROM: getattr(self, self.FROM),
+            self.TO: getattr(self, self.TO),
+            self.MANDATORY: getattr(self, self.MANDATORY),
+        }
 
 
 class RangeList(list):
     @classmethod
-    def loadl(cls, l, ubound):
-        rl = cls()
-        for d in l:
-            rl.append(Range.loadd(d, ubound))
-        rl.validate()
-        return rl
+    def read(cls, obj):
+        if not isinstance(obj, list):
+            raise IHSE("Each range list must be a JSON list: " + obj)
+        if len(obj) <= 0:
+            raise IHSE("Each range list must contain an element: " + obj)
 
-    def _sort_key_of(self, r):
-        return (r[Range.FROM], -r[Range.TO])
-
-    def _insert(self, i, r):
-        k = self._sort_key_of(r)
-        while(i < len(self)):
-            if(k < self._sort_key_of(self[i])):
-                self.insert(i, r)
-                return self
-            else:
-                i += 1
-        self.append(r)
+        self = cls()
+        for d in obj:
+            self.append(Range.read(d))
         return self
 
+    def sort(self):
+        super().sort(key=lambda r: r.sort())
+        return (getattr(self[0], Range.FROM), getattr(self[-1], Range.TO))
+
     def validate(self):
-        self.sort(key=lambda r: self._sort_key_of(r))
-        i = 0
-        while(i < len(self) - 1):
-            merger, mergee = self[i], self[i + 1]
-            assert merger[Range.FROM] <= mergee[Range.FROM]
-            if merger[Range.TO] < mergee[Range.FROM]:  # No relation
-                i += 1
-                continue
-            # Inclusion or Overlap
-            if merger[Range.MANDATORY] == mergee[Range.MANDATORY]:
-                self.pop(i + 1)
-                if merger[Range.TO] < mergee[Range.TO]:  # Overlap
-                    merger[Range.TO] = mergee[Range.TO]
-                continue
-            if merger[Range.TO] == mergee[Range.FROM]:  # Optimal
-                i += 1
-            if merger[Range.MANDATORY]:
-                if merger[Range.TO] < mergee[Range.TO]:  # Overlap
-                    mergee[Range.FROM] = merger[Range.TO]
-                else:  # Inclusion
-                    self.pop(i + 1)
-            else:
-                if merger[Range.TO] < mergee[Range.TO]:  # Overlap
-                    merger[Range.TO] = mergee[Range.FROM]
-                else:  # Inclusion
-                    r = Range.loadd({
-                        Range.FROM: mergee[Range.TO],
-                        Range.TO: merger[Range.TO],
-                        Range.MANDATORY: False,
-                    }, merger[Range.TO])
-                    merger[Range.TO] = mergee[Range.FROM]
-                    self._insert(i, r)
-        while(i < len(self)):
-            if(self[i].is_empty()):
-                self.pop(i)
-            else:
-                i += 1
+        for r in self:
+            assert isinstance(r, Range)
+            r.validate()
+        for i in range(len(self) - 1):
+            if getattr(self[i + 1], Range.FROM) < getattr(self[i], Range.TO):
+                raise IHSE("Overlapped ranges: %s" % json.dumps(self))
+
+    def write(self):
+        return [r.write() for r in self]
 
 
-class Headings(list):  # is a range jag
+class RangeJag(list):
     @classmethod
-    def loadl(cls, j, ubound):
-        h = cls()
-        for l in j:
-            h.append(RangeList.loadl(l, ubound))
-        return h
+    def read(cls, obj):
+        if not isinstance(obj, list):
+            raise IHSE("Each range jag must be a JSON list: " + obj)
+        if len(obj) <= 0:
+            raise IHSE("Each range jag must contain an element: " + obj)
+
+        self = cls()
+        for l in obj:
+            self.append(RangeList.read(l))
+        return self
+
+    def sort(self):
+        super().sort(key=lambda rl: rl.sort())
+
+    def validate(self):
+        for rl in self:
+            assert isinstance(rl, RangeList)
+            rl.validate()
+        for i in range(len(self) - 1):
+            if (getattr(self[i + 1][0], Range.FROM) <
+                    getattr(self[i][-1], Range.TO)):
+                raise IHSE("Overlapped range lists: %s" % json.dumps(self))
+
+    def write(self):
+        return [rl.write() for rl in self]
 
 
-class Block(dict):
+class BlockList(list):
+    @classmethod
+    def read(cls, obj):
+        if not isinstance(obj, list):
+            raise IHSE("Each block list must be a JSON list: " + obj)
 
+        self = cls()
+        for d in obj:
+            self.append(Block.read(d))
+        return self
+
+    def sort(self):
+        super().sort(key=lambda b: b.sort())
+
+    def validate(self):
+        for b in self:
+            assert isinstance(b, Block)
+            b.validate()
+
+    def write(self):
+        return [b.write() for b in self]
+
+
+class Block(object):
     CHILDREN = 'children'
     CONTENTS = 'contents'
     HEADINGS = 'headings'
+    STYLE = 'style'
+    __slots__ = [CHILDREN, CONTENTS, HEADINGS, STYLE]
 
     @classmethod
-    def loadd(cls, d, ubound):
-        b = cls()
-        b.update(d)
+    def read(cls, obj):
+        if not isinstance(obj, dict):
+            raise IHSE("Each block must be a JSON dict: " + obj)
+        for k in obj.keys():
+            if k not in cls.__slots__:
+                raise IHSE("Unknown property of a block: " + k)
 
-        b[Block.CHILDREN] = []
-        if Block.CHILDREN in d:
-            for c in d[Block.CHILDREN]:
-                b[Block.CHILDREN].append(Block.loadd(c, ubound))
-        b[Block.CONTENTS] = RangeList.loadl(
-            d[Block.CONTENTS] if (Block.CONTENTS in d) else [],
-            ubound,
-        )
-        b[Block.HEADINGS] = Headings.loadl(
-            d[Block.HEADINGS] if (Block.HEADINGS in d) else [],
-            ubound,
-        )
-        return b
+        self = cls()
+        if cls.CHILDREN in obj:
+            setattr(self, cls.CHILDREN, BlockList.read(obj[cls.CHILDREN]))
+        else:
+            setattr(self, cls.CHILDREN, BlockList())
+        if cls.CONTENTS in obj:
+            setattr(self, cls.CONTENTS, RangeList.read(obj[cls.CONTENTS]))
+        else:
+            raise IHSE("Each block must contain some contents: " + obj)
+        if cls.HEADINGS in obj:
+            setattr(self, cls.HEADINGS, RangeJag.read(obj[cls.HEADINGS]))
+        else:
+            raise IHSE("Each block must include some headings: " + obj)
+        setattr(self, cls.STYLE, obj.get(cls.STYLE, None))
+        return self
 
-    @property
-    def children(self):
-        return self[self.CHILDREN]
+    def sort(self):
+        getattr(self, self.CHILDREN).sort()
+        getattr(self, self.HEADINGS).sort()
+        return getattr(self, self.CONTENTS).sort()
 
-    @property
-    def contents(self):
-        return self[self.CONTENTS]
+    def validate(self):
+        assert isinstance(getattr(self, self.CHILDREN), BlockList)
+        getattr(self, self.CHILDREN).validate()
+        assert isinstance(getattr(self, self.CONTENTS), RangeList)
+        getattr(self, self.CONTENTS).validate()
+        assert isinstance(getattr(self, self.HEADINGS), RangeJag)
+        getattr(self, self.HEADINGS).validate()
+        if getattr(self, self.STYLE) is not None:
+            assert isinstance(getattr(self, self.STYLE), str)
 
-    @property
-    def headings(self):
-        return self[self.HEADINGS]
-
-    def __iter__(self):
-        return iter(self[Block.CHILDREN])
+    def write(self):
+        results = {
+            self.CHILDREN: getattr(self, self.CHILDREN).write(),
+            self.CONTENTS: getattr(self, self.CONTENTS).write(),
+            self.HEADINGS: getattr(self, self.HEADINGS).write(),
+        }
+        if getattr(self, self.STYLE, None) is not None:
+            results[self.STYLE] = getattr(self, self.STYLE)
+        return results
 
 
 class HeadingStructure(Block):
-
     RAW_STRING = 'rawString'
+    _URL, BASE_URL = 'URL', 'baseURL'
+    __slots__ = Block.__slots__ + [RAW_STRING, _URL, BASE_URL]
 
     @classmethod
-    def batch_load(cls, d):
-        from glob import glob
-        from os import path
-        result = {}
-        for p in glob(path.join(d, '*.json')):
-            b = p.rsplit('.', 1)[0].rsplit(path.sep, 1)[-1]
-            with open(p, 'r') as f:
-                try:
-                    result[b] = cls.load(f)
-                except ValueError:
-                    from sys import stderr
-                    stderr.write('ValueError loading %s\n' % p)
-        return result
+    def read(cls, obj):
+        if isinstance(obj, str):
+            if os.path.isfile(obj):  # File path
+                with open(obj) as f:
+                    return cls.read(f)
+            else:  # JSON
+                return cls.read(json.loads(obj))
+        if hasattr(obj, 'read'):  # File-like object
+            return cls.read(obj.read())
 
-    @classmethod
-    def load(cls, f):
-        return cls.loads(f.read())
-
-    @classmethod
-    def loads(cls, s):
-        d = json.loads(s)
-        if HeadingStructure.RAW_STRING in d:
-            rs = d[HeadingStructure.RAW_STRING]
+        # dict
+        self = super().read(obj)
+        if cls.RAW_STRING in obj:
+            setattr(self, cls.RAW_STRING, obj[cls.RAW_STRING])
         else:
-            rs = ''
-        hs = cls.loadd(d, len(rs))
-        hs[HeadingStructure.RAW_STRING] = rs
-        return hs
+            raise IHSE("Root block must contain raw string: " + obj)
+        setattr(self, cls._URL, obj.get(cls._URL, None))
+        setattr(self, cls.BASE_URL, obj.get(cls.BASE_URL, None))
+        return self
 
-    @property
-    def rawString(self):
-        return self[self.RAW_STRING]
+    def write(self):
+        results = super().write()
+        results[self.RAW_STRING] = getattr(self, self.RAW_STRING)
+        if self._URL is not None:
+            results[self._URL] = getattr(self, self._URL)
+        if self._URL is not None:
+            results[self.BASE_URL] = getattr(self, self.BASE_URL)
+        return results
 
-    def dump(self, f):
-        f.write(self.dumps())
 
-    def dumps(self):
-        return json.dumps(self, ensure_ascii=False, indent=2)
+if __name__ == '__main__':
+    import sys
+    sys.stderr.write('Listing JSONs invalid as heading structure...\n')
+    for path in sys.argv[1:]:
+        if os.path.isfile(path):
+            try:
+                HeadingStructure.read(path).validate()
+            except Exception:
+                print(path)
+                sys.stderr.write('Invalid: %s\n' % path)
+        else:
+            sys.stderr.write('File not found: %s\n' % path)
