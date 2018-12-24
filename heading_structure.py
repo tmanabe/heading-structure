@@ -44,7 +44,7 @@ class Range(object):
         assert isinstance(getattr(self, self.FROM), int)
         assert isinstance(getattr(self, self.TO), int)
         if getattr(self, self.TO) < getattr(self, self.FROM):
-            raise IHSE("Invalid range: %s" % json.dumps(self))
+            raise IHSE("Invalid range: %s" % json.dumps(self.write()))
         assert getattr(self, self.MANDATORY) in [False, True]
 
     def write(self):
@@ -78,7 +78,7 @@ class RangeList(list):
             r.validate()
         for i in range(len(self) - 1):
             if getattr(self[i + 1], Range.FROM) < getattr(self[i], Range.TO):
-                raise IHSE("Overlapped ranges: %s" % json.dumps(self))
+                raise IHSE("Overlapped ranges: %s" % json.dumps(self.write()))
 
     def write(self):
         return [r.write() for r in self]
@@ -107,7 +107,8 @@ class RangeJag(list):
         for i in range(len(self) - 1):
             if (getattr(self[i + 1][0], Range.FROM) <
                     getattr(self[i][-1], Range.TO)):
-                raise IHSE("Overlapped range lists: %s" % json.dumps(self))
+                raise IHSE("Overlapped range lists: %s" %
+                           json.dumps(self.write()))
 
     def write(self):
         return [rl.write() for rl in self]
