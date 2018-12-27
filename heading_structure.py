@@ -40,6 +40,9 @@ class Range(object):
     def sort(self):
         return (getattr(self, Range.FROM), getattr(self, Range.TO))
 
+    def to_string(self, raw_string):
+        return raw_string[getattr(self, self.FROM):getattr(self, self.TO)]
+
     def validate(self):
         assert isinstance(getattr(self, self.FROM), int)
         assert isinstance(getattr(self, self.TO), int)
@@ -71,6 +74,9 @@ class RangeList(list):
     def sort(self):
         super().sort(key=lambda r: r.sort())
         return (getattr(self[0], Range.FROM), getattr(self[-1], Range.TO))
+
+    def to_string(self, raw_string):
+        return [r.to_string(raw_string) for r in self]
 
     def validate(self):
         for r in self:
@@ -168,6 +174,63 @@ class Block(object):
         setattr(self, cls.STYLE, obj.get(cls.STYLE, None))
         return self
 
+    def get_contents(self, raw_string):
+        return getattr(self, self.CONTENTS).to_string(raw_string)
+
+    def flatten(self_block,
+                results,
+                ancestor_axes=[],
+                preceding_axes=None,
+                preceding_sibling_axes=[]):
+        class Axis(object):
+            def __init__(self, self_block):
+                self.block = self_block
+                self.precedings = []
+                self.preceding_siblings = []
+                self.ancestors = []
+                self.parent = None
+                self.self = self
+                self.children = []
+                self.descendants = []
+                self.following_siblings = []
+                self.followings = []
+
+        self_axis = Axis(self_block)
+        results.append(self_axis)
+
+        if preceding_axes is None:
+            preceding_axes = []
+        for preceding_axis in preceding_axes:
+            if preceding_axis not in (ancestor_axes + preceding_sibling_axes):
+                preceding_axis.followings.append(self_axis)
+                self_axis.precedings.append(preceding_axis)
+        preceding_axes.append(self_axis)
+
+        if 0 < len(ancestor_axes[:-1]):
+            for ancestor_axis in ancestor_axes[:-1]:
+                ancestor_axis.descendants.append(self_axis)
+                self_axis.ancestors.append(ancestor_axis)
+
+        if 0 < len(ancestor_axes):
+            ancestor_axes[-1].children.append(self_axis)
+            self_axis.parent = ancestor_axes[-1]
+
+        preceding_sibling_axes = []
+        for child_block in getattr(self_block, self_block.CHILDREN):
+            child_axis = child_block.flatten(results,
+                                             ancestor_axes + [self_axis],
+                                             preceding_axes,
+                                             preceding_sibling_axes)
+            for preceding_sibling_axis in preceding_sibling_axes:
+                preceding_sibling_axis.following_siblings.append(child_axis)
+                child_axis.preceding_siblings.append(preceding_sibling_axis)
+            preceding_sibling_axes.append(child_axis)
+
+        return self_axis
+
+    def get_heading(self, raw_string):
+        return getattr(self, self.HEADINGS)[0].to_string(raw_string)
+
     def sort(self):
         getattr(self, self.CHILDREN).sort()
         getattr(self, self.HEADINGS).sort()
@@ -219,6 +282,11 @@ class HeadingStructure(Block):
         setattr(self, cls._URL, obj.get(cls._URL, None))
         setattr(self, cls.BASE_URL, obj.get(cls.BASE_URL, None))
         return self
+
+    def flatten(self):
+        results = []
+        super().flatten(results)
+        return results
 
     def write(self):
         results = super().write()
