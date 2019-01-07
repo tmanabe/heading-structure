@@ -72,7 +72,7 @@ class RangeList(list):
         return self
 
     def sort(self):
-        super().sort(key=lambda r: r.sort())
+        super(RangeList, self).sort(key=lambda r: r.sort())
         return (getattr(self[0], Range.FROM), getattr(self[-1], Range.TO))
 
     def to_string(self, raw_string):
@@ -104,7 +104,7 @@ class RangeJag(list):
         return self
 
     def sort(self):
-        super().sort(key=lambda rl: rl.sort())
+        super(RangeJag, self).sort(key=lambda rl: rl.sort())
 
     def validate(self):
         for rl in self:
@@ -132,7 +132,7 @@ class BlockList(list):
         return self
 
     def sort(self):
-        super().sort(key=lambda b: b.sort())
+        super(BlockList, self).sort(key=lambda b: b.sort())
 
     def validate(self):
         for b in self:
@@ -243,8 +243,6 @@ class Block(object):
         getattr(self, self.CONTENTS).validate()
         assert isinstance(getattr(self, self.HEADINGS), RangeJag)
         getattr(self, self.HEADINGS).validate()
-        if getattr(self, self.STYLE) is not None:
-            assert isinstance(getattr(self, self.STYLE), str)
 
     def write(self):
         results = {
@@ -274,7 +272,7 @@ class HeadingStructure(Block):
             return cls.read(obj.read())
 
         # dict
-        self = super().read(obj)
+        self = super(HeadingStructure, cls).read(obj)
         if cls.RAW_STRING in obj:
             setattr(self, cls.RAW_STRING, obj[cls.RAW_STRING])
         else:
@@ -285,11 +283,11 @@ class HeadingStructure(Block):
 
     def flatten(self):
         results = []
-        super().flatten(results)
+        super(HeadingStructure, self).flatten(results)
         return results
 
     def write(self):
-        results = super().write()
+        results = super(HeadingStructure, self).write()
         results[self.RAW_STRING] = getattr(self, self.RAW_STRING)
         if self._URL is not None:
             results[self._URL] = getattr(self, self._URL)
